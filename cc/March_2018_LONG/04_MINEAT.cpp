@@ -1,9 +1,7 @@
-//http://codeforces.com/problemset/problem/712/C
-
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef long double ld;
+typedef long double ld; 
 typedef vector<int> vi;
 typedef vector<ll> vl;
 typedef vector<bool> vb;
@@ -30,29 +28,57 @@ void sieve() {
     for(ll i = 2; i <= N; i++) {
         if(!prime[i]) {
             prime[i] = i;
-            for(ll j = i * i; j <= N; j += i)
-                if(!prime[j])
+            for(ll j = i * i; j <= N; j += i) 
+                if(!prime[j]) 
                     prime[j] = i;
         }
     }
+}
+
+int t;
+int n, h;
+vi a;
+
+int gethr(int gg) {
+	int t = 0;
+	for(int i = 0; i < n; i++)
+		t += ceil((double)a[i] / gg);
+	return t;
+}
+
+int solve() {
+	int lo = 1, hi = 1e9, ans = 0, mid = 0;
+	int temp = 0;
+	while(hi - lo > 1) {
+		mid = (lo + hi) >> 1;
+		temp = gethr(mid);
+		if(temp > h)
+			lo = mid;
+		else
+			hi = mid;
+	}
+	temp = gethr(lo);
+	if(temp <= h)
+		return lo;
+	else
+		return hi;
 }
 
 int main(){
     ios_base::sync_with_stdio(false),cin.tie(NULL),cout.tie(NULL);
     clock_t tStart = clock();
 
-    int x, y;
-    cin >> x >> y;
-    int a, b, c, ans = 0;
-    a = b = c = y;
-    while(a != x) {
-        a = b;
-        b = c;
-        c = min(x, a + b - 1);
-        ans++;
-    }
+    cin >> t;
+    while(t--) {
+    	cin >> n >> h;
+    	int co;
+    	a.clear();
+    	for(int i = 0; i < n; i++)
+    		cin >> co, a.pb(co);
 
-    cout << ans << "\n";
+    	cout << solve() << "\n";
+
+    }
 
     cerr << "Time Elapsed : " << sp(10) << (double)(clock() - tStart)/CLOCKS_PER_SEC << "\n";
     return 0;
